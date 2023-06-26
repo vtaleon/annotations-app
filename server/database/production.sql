@@ -1,6 +1,6 @@
-drop database if exists annotations_test;
-create database annotations_test;
-use annotations_test;
+drop database if exists annotations;
+create database annotations;
+use annotations;
 
 create table app_user (
 	app_user_id int primary key auto_increment,
@@ -44,21 +44,7 @@ create table annotation (
     annotation text not null, index(annotation(10))
 );
 
-delimiter //
-create procedure set_known_good_state()
-begin
-
-delete from annotation;
-alter table annotation auto_increment = 1;
-
-delete from app_user_book;
-alter table annotation auto_increment = 1;
-
-delete from book;
-alter table book auto_increment = 1;
-
-delete from app_user;
-alter table app_user auto_increment = 1;
+-- TEST DATA
 
 insert into app_user(username, password_hash, enabled)
 	values
@@ -75,9 +61,3 @@ insert into app_user_book(app_user_id, book_id)
 insert into annotation(app_user_id, book_id, `date`, `quote`, annotation)
 	values
     (1, 1, "2023-06-26", "Test quote.", "Test annotation.");
-    
-end //
-delimiter ;
-
-select * from annotation;
-
